@@ -1,0 +1,11 @@
+{
+    "name": "carine/ecommerce-api",
+    "autoload": {
+        "psr-4": {
+            "Carine\\EcommerceApi\\": "src/"
+        }
+    },
+    "require": {
+        "firebase/php-jwt": "^6.11"
+    }
+}
