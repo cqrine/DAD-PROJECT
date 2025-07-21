@@ -2,9 +2,16 @@
 require_once __DIR__ . '/../../config/db.php';
 require_once __DIR__ . '/../../config/jwt.php';
 
+header("Content-Type: application/json");
 header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: GET");
+header("Access-Control-Allow-Methods: GET, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
+
+// Handle OPTIONS preflight request
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit;
+}
 
 // Get JWT token from header
 $authHeader = $_SERVER['HTTP_AUTHORIZATION'] ?? '';
@@ -13,7 +20,7 @@ $userData = validateJWT($token);
 
 if (!$userData) {
     http_response_code(401);
-    echo json_encode(["message" => "Unauthorized"]);
+    echo json_encode(["success" => false, "message" => "Unauthorized"]);
     exit;
 }
 
@@ -21,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     // Only delivery personnel can access this endpoint
     if ($userData['role'] !== 'delivery') {
         http_response_code(403);
-        echo json_encode(["message" => "Forbidden - Delivery personnel only"]);
+        echo json_encode(["success" => false, "message" => "Forbidden - Delivery personnel only"]);
         exit;
     }
     
@@ -49,9 +56,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     }
     
     http_response_code(200);
-    echo json_encode($deliveries);
+    echo json_encode(["success" => true, "deliveries" => $deliveries]);
 } else {
     http_response_code(405);
-    echo json_encode(["message" => "Method not allowed"]);
+    echo json_encode(["success" => false, "message" => "Method not allowed"]);
 }
 ?>

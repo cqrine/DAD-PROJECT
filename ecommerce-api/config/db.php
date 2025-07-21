@@ -1,6 +1,4 @@
 <?php
-header("Content-Type: application/json; charset=UTF-8");
-
 $host = 'localhost';
 $db   = 'ecommerce_db';
 $user = 'root';

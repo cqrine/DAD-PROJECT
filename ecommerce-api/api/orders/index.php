@@ -2,9 +2,16 @@
 require_once __DIR__ . '/../../config/db.php';
 require_once __DIR__ . '/../../config/jwt.php';
 
+header("Content-Type: application/json");
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET, POST, PATCH, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Authorization, X-HTTP-Method-Override");
+
+// Handle OPTIONS preflight request
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit;
+}
 
 // PATCH override support
 if ($_SERVER['REQUEST_METHOD'] === 'POST' &&
@@ -20,7 +27,7 @@ $userData = validateJWT($token);
 
 if (!$userData) {
     http_response_code(401);
-    echo json_encode(["message" => "Unauthorized"]);
+    echo json_encode(["success" => false, "message" => "Unauthorized"]);
     exit;
 }
 
@@ -115,8 +122,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     }
 
     try {
-        $stmt = $pdo->prepare("UPDATE orders SET status = ?, payment_method = ? WHERE order_id = ?");
-        $stmt->execute([$data->status, $data->payment_method, $data->order_id]);
+        // Verify order belongs to user
+        $stmt = $pdo->prepare("SELECT order_id FROM orders WHERE order_id = ? AND user_id = ?");
+        $stmt->execute([$data->order_id, $userData['userId']]);
+        
+        if (!$stmt->fetch()) {
+            http_response_code(403);
+            echo json_encode(["success" => false, "message" => "Order not found or access denied"]);
+            exit;
+        }
+
+        $stmt = $pdo->prepare("UPDATE orders SET status = ?, payment_method = ? WHERE order_id = ? AND user_id = ?");
+        $stmt->execute([$data->status, $data->payment_method, $data->order_id, $userData['userId']]);
 
         echo json_encode([
             "success" => true,
@@ -130,6 +147,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
 } else {
     http_response_code(405);
-    echo json_encode(["message" => "Method not allowed"]);
+    echo json_encode(["success" => false, "message" => "Method not allowed"]);
 }
 ?>
