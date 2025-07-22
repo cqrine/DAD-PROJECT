@@ -223,3 +223,37 @@ This system brings value to SMEs looking to digitalize delivery workflows. Integ
 
 ---
 
+## Setup and Configuration
+### 1. Download Project Files:
+- DeliveryApp (Java frontend for delivery staff)
+- CustomerApp (Java frontend for customers)
+- ecommerce-api (PHP backend API)
+- ecommerce_db.sql (Database file)
+
+### 2. Configure Backend (XAMPP):
+- Move the ecommerce-api folder to xampp/htdocs/.
+- Open XAMPP and start Apache and MySQL.
+- Click MySQL Admin to open phpMyAdmin.
+- Create a new database and import the ecommerce_db.sql file
+
+### 3. Open Java Frontends:
+- Launch Eclipse.
+- Open the DeliveryApp and CustomerApp projects in Eclipse.
+
+### 4. Configure API URLs:
+- Open the ApiConfig.java file in both apps.
+- To run locally on the same laptop as the server:
+```json
+BASE_URL = "http://localhost/ecommerce-api/api/";
+```
+- To run on different devices on the same Wi-Fi network:
+Replace localhost with your server machine's IPv4 address (e.g., 192.168.1.100):
+```java
+BASE_URL = "http://192.168.1.100/ecommerce-api/api/";
+```
+> **📂 Note:** Ensure all devices are connected to the same Wi-Fi network. Allow Apache through the firewall on the server machine. Test the API by visiting http://[IPv4]/ecommerce-api/ from a browser on other devices.
+  
+
+
+
+
