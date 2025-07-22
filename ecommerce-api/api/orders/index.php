@@ -88,10 +88,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                 $stmt->execute([$item->quantity, $item->product_id]);
             }
 
-            $stmt = $pdo->prepare("
-                INSERT INTO deliveries (order_id, assigned_to)
-                VALUES (?, (SELECT user_id FROM users WHERE role = 'delivery' ORDER BY RAND() LIMIT 1))
-            ");
+           $stmt = $pdo->prepare("
+    INSERT INTO deliveries (order_id, delivery_user_id)
+    VALUES (?, (SELECT user_id FROM users WHERE role = 'delivery' ORDER BY RAND() LIMIT 1))
+");
+
             $stmt->execute([$orderId]);
 
             $pdo->commit();

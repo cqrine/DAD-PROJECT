@@ -8,7 +8,7 @@ import shared.ApiClient;
 public class register {
 
     private JFrame frame;
-    private JTextField txtEmail, txtUsername, txtPassword, txtConfirmPassword, txtPhone;
+    private JTextField txtEmail, txtUsername, txtPassword, txtConfirmPassword, txtPhone, txtAddress;
 
     public static void main(String[] args) {
         EventQueue.invokeLater(() -> {
@@ -32,7 +32,8 @@ public class register {
     private void initialize() {
         frame = new JFrame();
         frame.setTitle("Register - Pantas Express");
-        frame.setBounds(100, 100, 800, 700);
+        frame.setSize(800, 700);             
+        frame.setLocationRelativeTo(null);         
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         JPanel contentPane = new JPanel();
@@ -100,9 +101,19 @@ public class register {
         txtPhone.setBounds(340, 370, 250, 30);
         contentPane.add(txtPhone);
 
+        JLabel lblAddress = new JLabel("Address:");
+        lblAddress.setFont(labelFont);
+        lblAddress.setForeground(white);
+        lblAddress.setBounds(180, 420, 150, 30);
+        contentPane.add(lblAddress);
+
+        txtAddress = new JTextField();
+        txtAddress.setBounds(340, 420, 250, 30);
+        contentPane.add(txtAddress);
+
         JButton btnConfirm = new JButton("CONFIRM");
         btnConfirm.setFont(new Font("Consolas", Font.PLAIN, 18));
-        btnConfirm.setBounds(260, 460, 140, 40);
+        btnConfirm.setBounds(260, 500, 140, 40);
         contentPane.add(btnConfirm);
 
         btnConfirm.addActionListener(e -> {
@@ -111,8 +122,9 @@ public class register {
             String password = txtPassword.getText().trim();
             String confirmPassword = txtConfirmPassword.getText().trim();
             String phone = txtPhone.getText().trim();
+            String address = txtAddress.getText().trim();
 
-            if (username.isEmpty() || email.isEmpty() || password.isEmpty()) {
+            if (username.isEmpty() || email.isEmpty() || password.isEmpty() || address.isEmpty()) {
                 JOptionPane.showMessageDialog(frame, "Please fill in all required fields.", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
@@ -122,7 +134,7 @@ public class register {
                 return;
             }
 
-            JSONObject response = ApiClient.register(username, email, password, phone);
+            JSONObject response = ApiClient.register(username, email, password, phone, "customer", address);
             if (response.getBoolean("success")) {
                 JOptionPane.showMessageDialog(frame, "Your account has been successfully created!", "Success", JOptionPane.INFORMATION_MESSAGE);
                 frame.dispose();
@@ -135,7 +147,7 @@ public class register {
 
         JButton btnReturn = new JButton("RETURN");
         btnReturn.setFont(new Font("Consolas", Font.PLAIN, 18));
-        btnReturn.setBounds(420, 460, 140, 40);
+        btnReturn.setBounds(420, 500, 140, 40);
         contentPane.add(btnReturn);
 
         btnReturn.addActionListener(e -> {

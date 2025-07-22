@@ -45,10 +45,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'PATCH' &&
     $orderId && !empty($data->status) && !empty($data->payment_method)) {
     
     try {
-        $stmt = $pdo->prepare("UPDATE orders SET status = ?, payment_method = ? WHERE order_id = ? AND user_id = ?");
+        // Fetch user default address
+        $stmtUser = $pdo->prepare("SELECT default_address FROM users WHERE user_id = ?");
+        $stmtUser->execute([$userData['userId']]);
+        $userRow = $stmtUser->fetch(PDO::FETCH_ASSOC);
+
+        $addressToUse = $data->address ?? $userRow['default_address'];
+
+        // Update order with payment info and address
+        $stmt = $pdo->prepare("
+            UPDATE orders 
+            SET status = ?, payment_method = ?, address = ?, delivery_address = ?
+            WHERE order_id = ? AND user_id = ?
+        ");
         $success = $stmt->execute([
             $data->status,
             $data->payment_method,
+            $addressToUse,
+            $addressToUse,
             $orderId,
             $userData['userId']
         ]);
@@ -56,8 +70,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'PATCH' &&
         if ($success) {
             echo json_encode([
                 "success" => true,
-                "message" => "Payment confirmed",
-                "order_id" => $orderId
+                "message" => "Payment confirmed and address updated",
+                "order_id" => $orderId,
+                "address_used" => $addressToUse
             ]);
         } else {
             http_response_code(500);

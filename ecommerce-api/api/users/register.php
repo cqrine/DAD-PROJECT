@@ -24,17 +24,23 @@ if (!empty($data->username) && !empty($data->email) && !empty($data->password)) 
         echo json_encode(["success" => false, "message" => "Username or email already exists"]);
         exit;
     }
-    
-    // Insert new user
+
+// Prepare values
     $hashedPassword = password_hash($data->password, PASSWORD_DEFAULT);
-    $stmt = $pdo->prepare("INSERT INTO users (username, email, password, phone) VALUES (?, ?, ?, ?)");
-    
-    if ($stmt->execute([$data->username, $data->email, $hashedPassword, $data->phone ?? null])) {
+    $phone = $data->phone ?? null;
+    $role = isset($data->role) && in_array($data->role, ['customer', 'delivery']) ? $data->role : 'customer';
+    $defaultAddress = isset($data->default_address) ? $data->default_address : null;
+
+    // Insert new user
+    $stmt = $pdo->prepare("INSERT INTO users (username, email, password, phone, role, default_address) VALUES (?, ?, ?, ?, ?, ?)");
+
+    if ($stmt->execute([$data->username, $data->email, $hashedPassword, $phone, $role, $defaultAddress])) {
         http_response_code(201);
         echo json_encode([
             "success" => true,
             "message" => "User registered successfully",
-            "user_id" => $pdo->lastInsertId()
+            "user_id" => $pdo->lastInsertId(),
+	"role" => $role
         ]);
     } else {
         http_response_code(500);

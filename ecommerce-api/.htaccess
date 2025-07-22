@@ -9,8 +9,11 @@
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
 
-    #Rewrite /api/orders/25 to /api/orders/id.php?id=25
+    # Rewrite /api/orders/25 to /api/orders/id.php?id=25
     RewriteRule ^api/orders/([0-9]+)$ api/orders/id.php?id=$1 [QSA,L]
+
+    # Rewrite /api/orders/pay/25 to /api/orders/pay.php?id=25  
+    RewriteRule ^api/orders/pay/([0-9]+)$ api/orders/pay.php?id=$1 [QSA,L]
 
     # Keep direct access to API files
     RewriteRule ^api/(.*)$ api/$1 [QSA,L]

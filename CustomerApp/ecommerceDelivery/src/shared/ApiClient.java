@@ -15,7 +15,7 @@ public class ApiClient {
 
     public static JSONObject login(String username, String password) {
         try {
-            URL url = new URL("http://localhost/ecommerce-api/api/login.php");
+            URL url = new URL(ApiConfig.BASE_URL + "login.php");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
             conn.setRequestProperty("Content-Type", "application/json");
@@ -60,9 +60,9 @@ public class ApiClient {
         }
     }
 
-    public static JSONObject register(String username, String email, String password, String phone) {
+    public static JSONObject register(String username, String email, String password, String phone, String role, String defaultAddress) {
         try {
-            URL url = new URL("http://localhost/ecommerce-api/api/users/register.php");
+            URL url = new URL(ApiConfig.BASE_URL + "users/register.php");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
             conn.setRequestProperty("Content-Type", "application/json");
@@ -73,6 +73,9 @@ public class ApiClient {
             json.put("email", email);
             json.put("password", password);
             json.put("phone", phone);
+            json.put("role", role);
+            json.put("default_address", defaultAddress);
+
 
             try (OutputStream os = conn.getOutputStream()) {
                 byte[] input = json.toString().getBytes("utf-8");
@@ -104,7 +107,7 @@ public class ApiClient {
     }
 
     public JSONArray getProducts() throws IOException {
-        URL url = new URL("http://localhost/ecommerce-api/api/products/index.php");
+        URL url = new URL(ApiConfig.BASE_URL + "products/index.php");
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("GET");
         conn.setRequestProperty("Authorization", "Bearer " + token);
@@ -132,7 +135,7 @@ public class ApiClient {
     }
 
     public JSONObject createOrder(JSONObject orderData) throws IOException {
-        URL url = new URL("http://localhost/ecommerce-api/api/orders/index.php");
+        URL url = new URL(ApiConfig.BASE_URL + "orders/index.php");
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("POST");
         conn.setRequestProperty("Content-Type", "application/json");
@@ -161,7 +164,7 @@ public class ApiClient {
     }
     
 public JSONObject updatePaymentStatus(String orderId, String paymentMethod) throws IOException {
-    String urlString = "http://localhost/ecommerce-api/api/orders/" + orderId;
+    String urlString = ApiConfig.BASE_URL + "orders/pay.php?id=" + orderId;
     URL url = new URL(urlString);
     
     HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -231,5 +234,47 @@ public JSONObject updatePaymentStatus(String orderId, String paymentMethod) thro
         return error;
     }
 }
+
+public JSONArray getDeliveriesForUser(int userId) throws IOException {
+    URL url = new URL(ApiConfig.BASE_URL + "deliveries/fetch_by_user.php?user_id=" + userId);
+    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+    conn.setRequestMethod("GET");
+    conn.setRequestProperty("Authorization", "Bearer " + token);
+
+    BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+    StringBuilder sb = new StringBuilder();
+    String line;
+    while ((line = br.readLine()) != null) sb.append(line);
+    br.close();
+
+    JSONObject res = new JSONObject(sb.toString());
+    return res.getJSONArray("data");
+}
+
+public JSONObject updateDeliveryStatus(int deliveryId, String status) throws IOException {
+    URL url = new URL(ApiConfig.BASE_URL + "deliveries/update_status.php");
+    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+    conn.setRequestMethod("POST");
+    conn.setRequestProperty("Authorization", "Bearer " + token);
+    conn.setRequestProperty("Content-Type", "application/json");
+    conn.setDoOutput(true);
+
+    JSONObject payload = new JSONObject();
+    payload.put("delivery_id", deliveryId);
+    payload.put("status", status);
+
+    try (OutputStream os = conn.getOutputStream()) {
+        os.write(payload.toString().getBytes("utf-8"));
+    }
+
+    BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+    StringBuilder sb = new StringBuilder();
+    String line;
+    while ((line = br.readLine()) != null) sb.append(line);
+    br.close();
+
+    return new JSONObject(sb.toString());
+}
+
 
 }

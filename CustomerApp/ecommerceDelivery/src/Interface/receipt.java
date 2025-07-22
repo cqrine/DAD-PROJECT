@@ -16,7 +16,8 @@ public class receipt extends JFrame {
     public receipt(ApiClient client, double totalAmount, List<String> items, String orderId, String paymentMethod) {
         this.apiClient = client;
         setTitle("Receipt");
-        setBounds(100, 100, 500, 600);
+        setSize(800, 700);              
+        setLocationRelativeTo(null);         
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         contentPane = new JPanel();
@@ -62,10 +63,6 @@ public class receipt extends JFrame {
         scrollPane.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
         contentPane.add(scrollPane, BorderLayout.CENTER);
 
-        JButton btnClose = new JButton("Close");
-        btnClose.setFont(new Font("Rockwell", Font.BOLD, 16));
-        btnClose.addActionListener(e -> dispose());
-
         JButton btnBackToProducts = new JButton("Back to Products");
         btnBackToProducts.setFont(new Font("Rockwell", Font.BOLD, 16));
         btnBackToProducts.addActionListener(e -> {
@@ -76,7 +73,6 @@ public class receipt extends JFrame {
         JPanel bottomPanel = new JPanel();
         bottomPanel.setBackground(new Color(255, 253, 208));
         bottomPanel.add(btnBackToProducts);
-        bottomPanel.add(btnClose);
         contentPane.add(bottomPanel, BorderLayout.SOUTH);
 
         setVisible(true);

@@ -33,7 +33,8 @@ public class product {
 
     private void initialize() {
         frame = new JFrame("Available Products ‑ Pantas Express");
-        frame.setBounds(100, 100, 800, 650);
+        frame.setSize(800, 700);              
+        frame.setLocationRelativeTo(null);         
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().setLayout(null);
         frame.getContentPane().setBackground(new Color(243, 112, 33));
@@ -93,7 +94,7 @@ public class product {
             int row = productTable.getSelectedRow();
             if (row >= 0) {
                 lblProductName.setText("Product: " + productTable.getValueAt(row, 1));
-                lblDescription.setText("Description: " + productTable.getValueAt(row, 1) + " details");
+                lblDescription.setText("Description: " + productTable.getValueAt(row, 2)); // column 3 = description
 
                 String[] exts = {".jpg", ".jpeg"};
                 ImageIcon icon = null;
@@ -126,7 +127,7 @@ public class product {
         btnViewCart.setBounds(310, 450, 160, 40);
         frame.getContentPane().add(btnViewCart);
 
-        JButton btnClose = new JButton("Close");
+        JButton btnClose = new JButton("Log Out");
         btnClose.setFont(new Font("Consolas", Font.PLAIN, 18));
         btnClose.setBounds(500, 450, 160, 40);
         frame.getContentPane().add(btnClose);
@@ -147,12 +148,16 @@ public class product {
         });
 
         btnViewCart.addActionListener(e -> openCartWindow());
-        btnClose.addActionListener(e -> frame.dispose());
+        btnClose.addActionListener(e -> {
+            frame.dispose();               
+            new login().showWindow(); 
+        });
     }
 
     private void openCartWindow() {
         JFrame cartFrame = new JFrame("My Cart");
         cartFrame.setBounds(150, 150, 500, 400);
+        cartFrame.setLocationRelativeTo(null);         
         cartFrame.getContentPane().setLayout(null);
         cartFrame.getContentPane().setBackground(new Color(243, 112, 33));
 

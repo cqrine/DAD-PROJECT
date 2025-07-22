@@ -19,7 +19,8 @@ public class payment extends JFrame {
         this.apiClient = client;
 
         setTitle("Payment Page");
-        setBounds(100, 100, 800, 650);
+        setSize(800, 700);              
+        setLocationRelativeTo(null);         
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         contentPane = new JPanel();

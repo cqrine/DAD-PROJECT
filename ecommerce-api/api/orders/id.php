@@ -70,6 +70,18 @@ if ($actualMethod === 'PATCH' && $orderId && !empty($data->status)) {
 
         // Handle payment status update (from Java frontend)
         if ($data->status === 'Paid' && !empty($data->payment_method)) {
+            // Verify order belongs to customer (if customer role)
+            if ($userData['role'] === 'customer') {
+                $stmt = $pdo->prepare("SELECT order_id FROM orders WHERE order_id = ? AND user_id = ?");
+                $stmt->execute([$orderId, $userData['userId']]);
+                if (!$stmt->fetch()) {
+                    http_response_code(403);
+                    ob_clean();
+                    echo json_encode(["success" => false, "message" => "Access denied"]);
+                    exit;
+                }
+            }
+
             // Update order with payment information
             $stmt = $pdo->prepare("UPDATE orders SET status = ?, payment_method = ? WHERE order_id = ?");
             $stmt->execute([$data->status, $data->payment_method, $orderId]);
