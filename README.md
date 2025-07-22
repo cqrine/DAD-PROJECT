@@ -219,6 +219,7 @@ This system brings value to SMEs looking to digitalize delivery workflows. Integ
 ## 📸 Screenshots & Diagrams
 
 > *(Insert visuals such as use case diagrams, ERD, and flowcharts in the `/images` folder and reference them here)*
+![ecommerce_db_erd](https://github.com/user-attachments/assets/ed979011-c6ed-44e2-b1a1-8363526da9a8)
 
 ---
 
