@@ -77,10 +77,10 @@ This system brings value to SMEs looking to digitalize delivery workflows. Integ
 | `/api/login.php`                    | POST   | Authenticate a user and return a JWT                     |
 | `/api/products/index.php`           | GET    | Retrieve list of available products                      |
 | `/api/orders/index.php`             | POST   | Place a new order with items                             |
-| `/api/orders/pay.php`               | GET    | Make payment for order                                   |
+| `/api/orders/pay.php`               | POST   | Make payment for order                                   |
 | `/api/deliveries/assigned.php`      | GET    | Get deliveries assigned to the logged-in delivery staff  |
 | `/api/deliveries/update_status.php` | PATCH  | Update delivery status that marked as delivered          |
-| `/api/deliveries/mark_delivered.php`| GET    | Mark orders as delivered by deliverer                    |
+| `/api/deliveries/mark_delivered.php`| POST   | Mark orders as delivered by deliverer                    |
 
 
 ### 2. Example Request Body
