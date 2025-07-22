@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 20, 2025 at 12:07 PM
+-- Generation Time: Jul 22, 2025 at 08:17 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -30,8 +30,8 @@ SET time_zone = "+00:00";
 CREATE TABLE `deliveries` (
   `delivery_id` int(11) NOT NULL,
   `order_id` int(11) NOT NULL,
-  `assigned_to` int(11) NOT NULL,
-  `status` enum('pending','awaiting_dispatch','in_transit','delivered') DEFAULT 'pending',
+  `delivery_user_id` int(11) NOT NULL,
+  `status` enum('pending','delivered') DEFAULT 'pending',
   `delivery_date` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -39,36 +39,16 @@ CREATE TABLE `deliveries` (
 -- Dumping data for table `deliveries`
 --
 
-INSERT INTO `deliveries` (`delivery_id`, `order_id`, `assigned_to`, `status`, `delivery_date`) VALUES
-(1, 1, 2, 'pending', NULL),
-(2, 2, 3, 'in_transit', NULL),
-(3, 3, 2, 'pending', NULL),
-(4, 4, 3, 'pending', NULL),
-(5, 5, 2, 'pending', NULL),
-(6, 6, 3, 'pending', NULL),
-(7, 7, 2, 'pending', NULL),
-(8, 8, 3, 'pending', NULL),
-(9, 9, 3, 'pending', NULL),
-(10, 10, 2, 'pending', NULL),
-(11, 11, 2, 'pending', NULL),
-(12, 12, 3, 'pending', NULL),
-(13, 13, 3, 'pending', NULL),
-(14, 14, 3, 'pending', NULL),
-(15, 15, 3, 'pending', NULL),
-(16, 16, 3, 'pending', NULL),
-(17, 17, 2, 'pending', NULL),
-(18, 18, 2, 'pending', NULL),
-(19, 19, 2, 'pending', NULL),
-(20, 20, 3, 'pending', NULL),
-(21, 21, 2, 'pending', NULL),
-(22, 22, 3, 'pending', NULL),
-(23, 23, 3, 'pending', NULL),
-(24, 24, 2, 'pending', NULL),
-(25, 25, 2, 'pending', NULL),
-(26, 26, 3, 'pending', NULL),
-(27, 27, 2, 'pending', NULL),
-(28, 28, 2, 'pending', NULL),
-(29, 29, 2, 'pending', NULL);
+INSERT INTO `deliveries` (`delivery_id`, `order_id`, `delivery_user_id`, `status`, `delivery_date`) VALUES
+(57, 1020, 17, 'delivered', '2025-07-22 12:02:11'),
+(58, 1021, 20, 'delivered', '2025-07-22 12:14:47'),
+(59, 1022, 17, 'pending', NULL),
+(60, 1023, 20, 'pending', NULL),
+(61, 1024, 8, 'pending', NULL),
+(62, 1025, 21, 'delivered', '2025-07-22 12:15:00'),
+(63, 1026, 17, 'pending', NULL),
+(64, 1027, 22, 'pending', NULL),
+(65, 1028, 20, 'delivered', '2025-07-22 12:14:35');
 
 -- --------------------------------------------------------
 
@@ -82,43 +62,25 @@ CREATE TABLE `orders` (
   `total_amount` decimal(10,2) NOT NULL,
   `status` enum('pending','shipped','delivered') DEFAULT 'pending',
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `payment_method` varchar(100) DEFAULT NULL
+  `payment_method` varchar(100) DEFAULT NULL,
+  `address` varchar(255) DEFAULT NULL,
+  `delivery_address` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `orders`
 --
 
-INSERT INTO `orders` (`order_id`, `user_id`, `total_amount`, `status`, `created_at`, `payment_method`) VALUES
-(1, 1, 1245.00, 'pending', '2025-07-17 22:17:33', NULL),
-(2, 1, 90.00, 'shipped', '2025-07-17 22:17:33', NULL),
-(3, 5, 1200.00, 'pending', '2025-07-19 09:21:28', NULL),
-(4, 5, 45.00, 'pending', '2025-07-19 09:40:54', NULL),
-(5, 5, 3200.00, 'pending', '2025-07-19 09:41:28', NULL),
-(6, 5, 90.00, 'pending', '2025-07-19 09:48:09', NULL),
-(7, 5, 25.00, 'pending', '2025-07-19 09:53:31', NULL),
-(8, 5, 3200.00, 'pending', '2025-07-19 11:01:19', NULL),
-(9, 5, 25.00, 'pending', '2025-07-19 11:02:06', NULL),
-(10, 5, 1200.00, 'pending', '2025-07-19 11:13:47', NULL),
-(11, 5, 25.00, 'pending', '2025-07-19 16:20:26', NULL),
-(12, 5, 25.00, 'pending', '2025-07-19 17:50:16', NULL),
-(13, 5, 90.00, 'pending', '2025-07-19 17:54:37', NULL),
-(14, 5, 25.00, 'pending', '2025-07-20 07:23:16', NULL),
-(15, 5, 90.00, 'pending', '2025-07-20 07:28:00', NULL),
-(16, 5, 90.00, 'pending', '2025-07-20 07:54:21', NULL),
-(17, 5, 90.00, 'pending', '2025-07-20 08:03:28', NULL),
-(18, 5, 25.00, 'pending', '2025-07-20 08:04:54', NULL),
-(19, 5, 90.00, 'pending', '2025-07-20 08:06:12', NULL),
-(20, 5, 25.00, 'pending', '2025-07-20 08:29:12', NULL),
-(21, 5, 90.00, 'pending', '2025-07-20 08:51:20', NULL),
-(22, 5, 45.00, 'pending', '2025-07-20 08:58:02', NULL),
-(23, 5, 3200.00, 'pending', '2025-07-20 09:04:20', NULL),
-(24, 5, 25.00, 'pending', '2025-07-20 09:10:57', NULL),
-(25, 5, 45.00, '', '2025-07-20 09:13:40', 'Cash'),
-(26, 5, 90.00, 'pending', '2025-07-20 09:19:17', NULL),
-(27, 5, 25.00, 'pending', '2025-07-20 09:21:17', NULL),
-(28, 5, 25.00, 'pending', '2025-07-20 09:24:08', NULL),
-(29, 5, 25.00, 'pending', '2025-07-20 09:59:28', NULL);
+INSERT INTO `orders` (`order_id`, `user_id`, `total_amount`, `status`, `created_at`, `payment_method`, `address`, `delivery_address`) VALUES
+(1020, 19, 90.00, 'delivered', '2025-07-22 17:51:58', 'Cash', '2, Jalan Mewah, Johor', '2, Jalan Mewah, Johor'),
+(1021, 5, 1315.00, 'delivered', '2025-07-22 18:09:34', 'Cash', '1, Jalan Perdana, Melaka', '1, Jalan Perdana, Melaka'),
+(1022, 5, 1200.00, '', '2025-07-22 18:10:14', 'TnG e-Wallet', '1, Jalan Perdana, Melaka', '1, Jalan Perdana, Melaka'),
+(1023, 5, 3200.00, '', '2025-07-22 18:10:29', 'Cash', '1, Jalan Perdana, Melaka', '1, Jalan Perdana, Melaka'),
+(1024, 19, 90.00, '', '2025-07-22 18:11:35', 'Cash', '2, Jalan Mewah, Johor', '2, Jalan Mewah, Johor'),
+(1025, 19, 25.00, 'delivered', '2025-07-22 18:11:59', 'Visa Card', '2, Jalan Mewah, Johor', '2, Jalan Mewah, Johor'),
+(1026, 19, 45.00, '', '2025-07-22 18:12:17', 'Visa Card', '2, Jalan Mewah, Johor', '2, Jalan Mewah, Johor'),
+(1027, 19, 45.00, '', '2025-07-22 18:12:31', 'Cash', '2, Jalan Mewah, Johor', '2, Jalan Mewah, Johor'),
+(1028, 23, 90.00, 'delivered', '2025-07-22 18:12:55', 'Cash', '10, Jalan Melur, Kedah', '10, Jalan Melur, Kedah');
 
 -- --------------------------------------------------------
 
@@ -139,36 +101,17 @@ CREATE TABLE `order_items` (
 --
 
 INSERT INTO `order_items` (`item_id`, `order_id`, `product_id`, `quantity`, `price`) VALUES
-(1, 1, 'P001', 1, 1200.00),
-(2, 1, 'P002', 1, 45.00),
-(3, 2, 'P004', 1, 90.00),
-(4, 3, 'P001', 1, 1200.00),
-(5, 4, 'P002', 1, 45.00),
-(6, 5, 'P003', 1, 3200.00),
-(7, 6, 'P004', 1, 90.00),
-(8, 7, 'P005', 1, 25.00),
-(9, 8, 'P003', 1, 3200.00),
-(10, 9, 'P005', 1, 25.00),
-(11, 10, 'P001', 1, 1200.00),
-(12, 11, 'P005', 1, 25.00),
-(13, 12, 'P005', 1, 25.00),
-(14, 13, 'P004', 1, 90.00),
-(15, 14, 'P005', 1, 25.00),
-(16, 15, 'P004', 1, 90.00),
-(17, 16, 'P004', 1, 90.00),
-(18, 17, 'P004', 1, 90.00),
-(19, 18, 'P005', 1, 25.00),
-(20, 19, 'P004', 1, 90.00),
-(21, 20, 'P005', 1, 25.00),
-(22, 21, 'P004', 1, 90.00),
-(23, 22, 'P002', 1, 45.00),
-(24, 23, 'P003', 1, 3200.00),
-(25, 24, 'P005', 1, 25.00),
-(26, 25, 'P002', 1, 45.00),
-(27, 26, 'P004', 1, 90.00),
-(28, 27, 'P005', 1, 25.00),
-(29, 28, 'P005', 1, 25.00),
-(30, 29, 'P005', 1, 25.00);
+(70, 1020, 'P004', 1, 90.00),
+(71, 1021, 'P001', 1, 1200.00),
+(72, 1021, 'P004', 1, 90.00),
+(73, 1021, 'P005', 1, 25.00),
+(74, 1022, 'P001', 1, 1200.00),
+(75, 1023, 'P003', 1, 3200.00),
+(76, 1024, 'P004', 1, 90.00),
+(77, 1025, 'P005', 1, 25.00),
+(78, 1026, 'P002', 1, 45.00),
+(79, 1027, 'P002', 1, 45.00),
+(80, 1028, 'P004', 1, 90.00);
 
 -- --------------------------------------------------------
 
@@ -190,11 +133,11 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`product_id`, `name`, `description`, `price`, `stock`, `created_at`) VALUES
-('P001', 'Smartphone', '5G-enabled Android phone', 1200.00, 48, '2025-07-17 22:17:33'),
-('P002', 'Wireless Mouse', 'Ergonomic design, USB', 45.00, 97, '2025-07-17 22:17:33'),
-('P003', 'Laptop', 'Intel i7, 16GB RAM, 512GB SSD', 3200.00, 17, '2025-07-17 22:17:33'),
-('P004', 'Headphones', 'Noise cancelling over-ear', 90.00, 67, '2025-07-17 22:17:33'),
-('P005', 'USB-C Charger', 'Fast charging 20W', 25.00, 189, '2025-07-17 22:17:33');
+('P001', 'Smartphone', '5G-enabled Android phone', 1200.00, 40, '2025-07-17 22:17:33'),
+('P002', 'Wireless Mouse', 'Ergonomic design, USB', 45.00, 91, '2025-07-17 22:17:33'),
+('P003', 'Laptop', 'Intel i7, 16GB RAM, 512GB SSD', 3200.00, 12, '2025-07-17 22:17:33'),
+('P004', 'Headphones', 'Noise cancelling over-ear', 90.00, 53, '2025-07-17 22:17:33'),
+('P005', 'USB-C Charger', 'Fast charging 20W', 25.00, 177, '2025-07-17 22:17:33');
 
 -- --------------------------------------------------------
 
@@ -209,19 +152,26 @@ CREATE TABLE `users` (
   `password` varchar(255) NOT NULL,
   `phone` varchar(20) DEFAULT NULL,
   `role` enum('customer','delivery') DEFAULT 'customer',
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `default_address` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`user_id`, `username`, `email`, `password`, `phone`, `role`, `created_at`) VALUES
-(1, 'customer1', 'customer1@example.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', '0123456789', 'customer', '2025-07-17 22:17:33'),
-(2, 'delivery1', 'delivery1@example.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', '0123456789', 'delivery', '2025-07-17 22:17:33'),
-(3, 'delivery2', 'delivery2@example.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', '0123456789', 'delivery', '2025-07-17 22:17:33'),
-(4, 'newuser', 'newuser@example.com', '$2y$10$ZSb89otaeZe.w1BoaGxNruFkgzs2aYWeID11WztTGiMAFqy9/EeBa', '0123456789', 'customer', '2025-07-17 22:30:32'),
-(5, 'zurine', 'zurine@gmail.com', '$2y$10$z4oVk5M8KQo9qOxTHJUs2e5z2n.pXx3W2N26sqxE7Qcw8ohUXpime', '0138652418', 'customer', '2025-07-19 07:29:32');
+INSERT INTO `users` (`user_id`, `username`, `email`, `password`, `phone`, `role`, `created_at`, `default_address`) VALUES
+(5, 'zurine', 'zurine@gmail.com', '$2y$10$z4oVk5M8KQo9qOxTHJUs2e5z2n.pXx3W2N26sqxE7Qcw8ohUXpime', '0138652418', 'customer', '2025-07-19 07:29:32', '1, Jalan Perdana, Melaka'),
+(8, 'aishah', 'aishah@gmail.com', '$2y$10$OmJFNUHezfX6DoCHk2E.quQ/uhKlSFrRdGzXYe/KWUer7TTouR8IW', '012345634', 'delivery', '2025-07-21 14:44:31', NULL),
+(14, 'alice', 'alice@example.com', '$2y$10$CKzUxeE5PRY6vVUg5A9zUOTM7VNBqPDXL3w8iW1qoz9TlhgYq7e.C', '0111000001', 'customer', '2025-07-22 06:24:27', '12 Jalan Bukit, Melaka'),
+(15, 'bob', 'bob@example.com', '$2y$10$CKzUxeE5PRY6vVUg5A9zUOTM7VNBqPDXL3w8iW1qoz9TlhgYq7e.C', '0111000002', 'customer', '2025-07-22 06:24:27', '45 Lorong Mawar, KL'),
+(17, 'lisha', 'lisha@gmail.com', '$2y$10$pDGz//ZFKhBDMay3dHHlMuqaYADyecqt7/mxuKZ/cmwLGy1Jx6.Hi', '012345653', 'delivery', '2025-07-22 12:28:50', NULL),
+(18, 'alisha', 'alisha@gmail.com', '$2y$10$RA4JGVgRz5ir5K0dzMnAQeHM/slxm2v3bT1oJcKlAJMzPC4.TQSa6', '012345432', 'customer', '2025-07-22 12:37:41', NULL),
+(19, 'ena', 'ena@email.com', '$2y$10$X4sl.TAxL.1sIq371wrRJeEesCcnLZM2/Im.pF9THkqfSPdwwCFiu', '012345243', 'customer', '2025-07-22 14:15:28', '2, Jalan Mewah, Johor'),
+(20, 'zulaina', 'zulaina@email.com', '$2y$10$8O5zbmTrAdDDfRKGtm7NWOxUu5TXIBZZZdjt2RwifQbs8/5xNjxbm', '012635245', 'delivery', '2025-07-22 14:16:30', NULL),
+(21, 'zulisha', 'zulisha@email.com', '$2y$10$Q1CuhU4kCDGEQKYDteUCiuSXJHX7cZTJBSmcVgZcwnMkEiEbawqxa', '012345243', 'delivery', '2025-07-22 14:25:45', NULL),
+(22, 'faiz', 'faiz@email.com', '$2y$10$Du9OuaZZYlR24gAHQ9SwX.XxRXUHIOcPplcTApxIwYE7Qoe8WCB7O', '012547251', 'delivery', '2025-07-22 16:34:59', NULL),
+(23, 'alia', 'alia@email.com', '$2y$10$9ypUjduSHMJAYVEEXWJazu/3xZn0dVRG2G21PwrJhwtw7J796gIr.', '012736523', 'customer', '2025-07-22 17:10:52', '10, Jalan Melur, Kedah');
 
 --
 -- Indexes for dumped tables
@@ -233,7 +183,7 @@ INSERT INTO `users` (`user_id`, `username`, `email`, `password`, `phone`, `role`
 ALTER TABLE `deliveries`
   ADD PRIMARY KEY (`delivery_id`),
   ADD KEY `order_id` (`order_id`),
-  ADD KEY `assigned_to` (`assigned_to`);
+  ADD KEY `assigned_to` (`delivery_user_id`);
 
 --
 -- Indexes for table `orders`
@@ -272,25 +222,25 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `deliveries`
 --
 ALTER TABLE `deliveries`
-  MODIFY `delivery_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+  MODIFY `delivery_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=66;
 
 --
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1029;
 
 --
 -- AUTO_INCREMENT for table `order_items`
 --
 ALTER TABLE `order_items`
-  MODIFY `item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=81;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- Constraints for dumped tables
@@ -301,7 +251,7 @@ ALTER TABLE `users`
 --
 ALTER TABLE `deliveries`
   ADD CONSTRAINT `deliveries_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`),
-  ADD CONSTRAINT `deliveries_ibfk_2` FOREIGN KEY (`assigned_to`) REFERENCES `users` (`user_id`);
+  ADD CONSTRAINT `deliveries_ibfk_2` FOREIGN KEY (`delivery_user_id`) REFERENCES `users` (`user_id`);
 
 --
 -- Constraints for table `orders`
@@ -313,8 +263,8 @@ ALTER TABLE `orders`
 -- Constraints for table `order_items`
 --
 ALTER TABLE `order_items`
-  ADD CONSTRAINT `order_items_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`),
-  ADD CONSTRAINT `order_items_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `products` (`product_id`);
+  ADD CONSTRAINT `fk_order_items_order` FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_order_items_product` FOREIGN KEY (`product_id`) REFERENCES `products` (`product_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
