@@ -1,5 +1,5 @@
 
-# Cepat Express – E-Commerce Delivery System
+# Pantas Express – E-Commerce Delivery System
 
 ## Universiti Teknikal Malaysia Melaka  
 **Faculty:** Fakulti Teknologi Maklumat dan Komunikasi  
@@ -34,9 +34,9 @@
 
 ### Project Overview
 
-Cepat Express is a distributed e-commerce delivery system designed to simplify food ordering and last-mile delivery. It provides two desktop applications:
-- **Customer App** – To browse, order, and track products.
-- **Deliverer App** – To accept and complete delivery tasks.
+Cepat Express is a distributed e-commerce delivery system designed to simplify products ordering and last-mile delivery. It provides two desktop applications:
+- **Customer App** – To sign up, login, browse products, order products, make payment, view receipt.
+- **Deliverer App** – To track and complete delivery tasks.
 
 ---
 
@@ -59,7 +59,7 @@ This system brings value to SMEs looking to digitalize delivery workflows. Integ
 ## 🛠 Backend Application
 
 ### Technology Stack
-- **Java** – Customer & Deliverer applications
+- **Java** – Customer & Delivery applications
 - **PHP** – REST API
 - **Java Swing** – GUI
 - **XAMPP** – Server environment
@@ -71,37 +71,41 @@ This system brings value to SMEs looking to digitalize delivery workflows. Integ
 ## 🔌 API Documentation
 
 ### 1. List of API Endpoints
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/api/register` | POST | Register new user |
-| `/api/login` | POST | User login |
-| `/api/products` | GET | Get product list |
-| `/api/orders` | POST | Place an order |
-| `/api/orders/{id}` | GET | View order |
-| `/api/orders/update` | PUT | Update delivery status |
+| Endpoint                            | Method | Description                                              |
+| ----------------------------------- | ------ | -------------------------------------------------------- |
+| `/api/users/register.php`           | POST   | Register a new user (customer/deliverer)                 |
+| `/api/login.php`                    | POST   | Authenticate a user and return a JWT                     |
+| `/api/products/index.php`           | GET    | Retrieve list of available products                      |
+| `/api/orders/index.php`             | POST   | Place a new order with items                             |
+| `/api/orders/pay.php`               | GET    | Make payment for order                                   |
+| `/api/deliveries/assigned.php`      | GET    | Get deliveries assigned to the logged-in delivery staff  |
+| `/api/deliveries/update_status.php` | PATCH  | Update delivery status that marked as delivered          |
+| `/api/deliveries/mark_delivered.php`| GET    | Mark orders as delivered by deliverer                    |
+
 
 ### 2. Example Request Body
 ```json
 {
-  "username": "john_doe",
-  "password": "secure123",
-  "email": "john@example.com"
+  "username": "ena",
+  "password": "abc12345"
 }
 ```
 
 ### 3. Example Responses
 ```json
 {
-  "status": "success",
-  "message": "Order placed successfully",
-  "orderId": 1024
+    "success": true,
+    "message": "Login successful",
+    "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3NTMyMDg3NDgsImV4cCI6MTc1MzIxMjM0OCwiZGF0YSI6eyJ1c2VySWQiOjE5LCJ1c2VybmFtZSI6ImVuYSIsInJvbGUiOiJjdXN0b21lciJ9fQ.jl2n0WT9KL-nwdUp1YVcdGp3Sup5_sfnpqNnQzunv84",
+    "user_id": 19,
+    "role": "customer"
 }
 ```
 
 ```json
 {
-  "status": "error",
-  "message": "Invalid credentials"
+    "success": false,
+    "message": "Invalid username or password"
 }
 ```
 
@@ -118,21 +122,23 @@ This system brings value to SMEs looking to digitalize delivery workflows. Integ
 
 ### Customer App
 
-**Purpose:** Provides GUI to browse products, order food, and track deliveries.
+**Purpose:** Provides GUI to sign up, login, browse products, order products, add items to cart, make payment, and view receipt.
 
 **Stack:**
 - Java + Swing
 - JSON for API exchange
 - HTTPConnection for requests
+- Integrates with backend endpoints
+
 
 **API Endpoints Used:**
-- `/register.php`, `/login.php`, `/place_order.php`, `/get_orders.php`, `/update_payment_status.php`
+- `/users/register.php`, `/login.php`, `/products/index.php`, `/orders/index.php`, `orders/pay.php`
 
 ---
 
-### Deliverer App
+### Delivery App
 
-**Purpose:** Allows delivery riders to log in, accept orders, and update statuses.
+**Purpose:** Allows deliverers to sign up, log in, browse orders with different statuses, and update statuses.
 
 **Stack:**
 - Java + Swing
@@ -140,7 +146,7 @@ This system brings value to SMEs looking to digitalize delivery workflows. Integ
 - Integrates with backend endpoints
 
 **API Endpoints Used:**
-- `/register.php`, `/login.php`, `/get_orders_rider.php`, `/accept_order.php`, `/mark_delivered.php`
+- `users/register.php`, `/login.php`, `deliveries/assigned.php`, `deliveries/mark_delivered.php`, `deliveries/update_status.php`
 
 ---
 
@@ -149,25 +155,28 @@ This system brings value to SMEs looking to digitalize delivery workflows. Integ
 ### ERD Relationships
 
 - `users` ⇨ `orders` (1:N)
+- `users` ⇨ `deliveries` (1:1)
 - `orders` ⇨ `order_items` (1:N)
 - `orders` ⇨ `deliveries` (1:1)
+- `products` ⇨ `order_items` (1:N)
+
 
 ### Main Tables
 
 **`users`**
-- `user_id`, `username`, `email`, `password`, `phone`, `role`, `created_at`
+- `user_id`, `username`, `email`, `password`, `phone`, `role`, `created_at`, `default_address`
 
 **`products`**
 - `product_id`, `name`, `description`, `price`, `stock`, `created_at`
 
 **`orders`**
-- `order_id`, `user_id`, `total_amount`, `status`, `created_at`, `payment_method`
+- `order_id`, `user_id`, `total_amount`, `status`, `created_at`, `payment_method`, `address`, `delivery_address`
 
 **`order_items`**
 - `item_id`, `order_id`, `product_id`, `quantity`, `price`
 
 **`deliveries`**
-- `delivery_id`, `order_id`, `assigned_to`, `status`, `delivery_date`
+- `delivery_id`, `order_id`, `delivery_user_id`, `status`, `delivery_date`
 
 ---
 
@@ -182,15 +191,16 @@ This system brings value to SMEs looking to digitalize delivery workflows. Integ
 | Email | Cannot be empty |
 | Phone | 10–11 digits, valid format |
 | Role | Must be "customer" |
+| Address | Cannot be empty |
 | Payment | Must be valid method (TnG, FPX, Visa, Cash) |
 
-### Deliverer App Validation
+### Delivery App Validation
 | Field | Rule |
 |-------|------|
 | Username, Password | Cannot be empty |
-| Password | At least 6 characters |
+| Password | At least 6 characters, includes letters, numbers, symbols |
 | Confirm Password | Must match Password |
-| Role | Must be "rider" |
+| Role | Must be "delivery" |
 | Order ID | Must be valid int |
 
 ### Backend Validation
@@ -212,6 +222,3 @@ This system brings value to SMEs looking to digitalize delivery workflows. Integ
 
 ---
 
-## 📞 Contact
-
-For further information, contact any of the group members or the supervising lecturer.
