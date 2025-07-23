@@ -53,7 +53,7 @@ This system brings value to SMEs looking to digitalize delivery workflows. Integ
 ### High-Level Diagram
 
 <img width="610" height="318" alt="system architecture" src="https://github.com/user-attachments/assets/695e7221-21d8-4009-89f6-283b1caa4d11" />
-med `architecture.png`)
+
 
 ---
 
