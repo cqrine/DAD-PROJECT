@@ -219,9 +219,8 @@ med `architecture.png`)
 
 ## 📸 Screenshots & Diagrams
 
-> *(Insert visuals such as use case diagrams, ERD, and flowcharts in the `/images` folder and reference them here)*
 ![ecommerce_db_erd](https://github.com/user-attachments/assets/ed979011-c6ed-44e2-b1a1-8363526da9a8)
-> <img width="610" height="318" alt="system architecture" src="https://github.com/user-attachments/assets/58ba7814-011a-42f8-a824-b1aa619e4e2c" />
+<img width="691" height="702" alt="UseCaseDiagram" src="https://github.com/user-attachments/assets/54a19a1b-f4a8-4759-9ea9-d5610fc9f3d4" />
 
 
 ---
