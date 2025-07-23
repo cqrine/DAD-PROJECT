@@ -34,7 +34,7 @@
 
 ### Project Overview
 
-Cepat Express is a distributed e-commerce delivery system designed to simplify products ordering and last-mile delivery. It provides two desktop applications:
+Pantas Express is a distributed e-commerce delivery system designed to simplify products ordering and last-mile delivery. It provides two desktop applications:
 - **Customer App** – To sign up, login, browse products, order products, make payment, view receipt.
 - **Deliverer App** – To track and complete delivery tasks.
 
@@ -52,7 +52,8 @@ This system brings value to SMEs looking to digitalize delivery workflows. Integ
 
 ### High-Level Diagram
 
-*(You can include a diagram image here named `architecture.png`)*
+<img width="610" height="318" alt="system architecture" src="https://github.com/user-attachments/assets/695e7221-21d8-4009-89f6-283b1caa4d11" />
+med `architecture.png`)
 
 ---
 
@@ -220,6 +221,8 @@ This system brings value to SMEs looking to digitalize delivery workflows. Integ
 
 > *(Insert visuals such as use case diagrams, ERD, and flowcharts in the `/images` folder and reference them here)*
 ![ecommerce_db_erd](https://github.com/user-attachments/assets/ed979011-c6ed-44e2-b1a1-8363526da9a8)
+> <img width="610" height="318" alt="system architecture" src="https://github.com/user-attachments/assets/58ba7814-011a-42f8-a824-b1aa619e4e2c" />
+
 
 ---
 
